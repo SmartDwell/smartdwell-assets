@@ -28,6 +28,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapMeasureUnitGroup();
+app.MapParameterGroup();
+app.MapCategoryGroup();
 
 app.Run();

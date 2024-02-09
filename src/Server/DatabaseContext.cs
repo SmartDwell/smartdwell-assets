@@ -1,7 +1,5 @@
-using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Models;
-using Server.Helpers;
 
 namespace Server;
 
@@ -28,9 +26,14 @@ public sealed class DatabaseContext : DbContext
     public DbSet<Parameter> Parameters { get; set; } = null!;
     
     /// <summary>
-    /// Коллекция единиц измерения.
+    /// Коллекция параметров категорий.
     /// </summary>
-    public DbSet<MeasureUnit> MeasureUnits { get; set; } = null!;
+    public DbSet<CategoryParameter> CategoryParameters { get; set; } = null!;
+    
+    /// <summary>
+    /// Коллекция параметров категорий, прикрепленных к активам.
+    /// </summary>
+    public DbSet<AssetCategoryParameter> AssetCategoryParameters { get; set; } = null!;
     
     #endregion
     
@@ -58,7 +61,7 @@ public sealed class DatabaseContext : DbContext
             entity.Property(e => e.Name).IsRequired();
             entity.Property(e => e.Description);
             entity.Property(e => e.Images).IsRequired();
-            entity.HasMany(e => e.Categories).WithMany(e => e.Assets);
+            entity.HasMany(e => e.Categories).WithOne(e => e.Asset).HasForeignKey(e => e.AssetId);
         });
         
         modelBuilder.Entity<Category>(entity =>
@@ -66,15 +69,17 @@ public sealed class DatabaseContext : DbContext
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Name).IsRequired();
             entity.Property(e => e.Description);
-            entity.HasMany(e => e.Parameters).WithMany(e => e.Categories);
-            entity.HasMany(e => e.Assets).WithMany(e => e.Categories);
+            entity.Property(e => e.UseForApi).IsRequired();
+            entity.HasMany(e => e.CategoryParameters).WithOne(e => e.Category).HasForeignKey(e => e.CategoryId);
             
             entity.HasData(
-                new Category { Id = Guid.NewGuid(), Name = "Жилой комплекс" },
-                new Category { Id = Guid.NewGuid(), Name = "Дом" },
-                new Category { Id = Guid.NewGuid(), Name = "Квартира" },
-                new Category { Id = Guid.NewGuid(), Name = "Подъезд" },
-                new Category { Id = Guid.NewGuid(), Name = "Этаж" }
+                new Category { Id = Guid.NewGuid(), Name = "Жилой комплекс", UseForApi = true, },
+                new Category { Id = Guid.NewGuid(), Name = "Дом", UseForApi = true, },
+                new Category { Id = Guid.NewGuid(), Name = "Квартира", UseForApi = true, },
+                new Category { Id = Guid.NewGuid(), Name = "Подъезд", UseForApi = true, },
+                new Category { Id = Guid.NewGuid(), Name = "Этаж", UseForApi = true, },
+                new Category { Id = Guid.NewGuid(), Name = "Игровая площадка", UseForApi = true, },
+                new Category { Id = Guid.NewGuid(), Name = "Детсткая площадка", UseForApi = true, }
             );
         });
         
@@ -82,18 +87,26 @@ public sealed class DatabaseContext : DbContext
         {
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Name).IsRequired();
-            entity.Property(e => e.Description);
-            entity.Property(e => e.Type).IsRequired();
-            entity.Property(e => e.Value).IsRequired();
-            entity.HasOne(e => e.MeasureUnit).WithMany(e => e.Parameters);
-            entity.HasMany(e => e.Categories).WithMany(e => e.Parameters);
+            entity.Property(e => e.TypeCode).IsRequired();
+            entity.HasMany(e => e.CategoryParameters).WithOne(e => e.Parameter).HasForeignKey(e => e.ParameterId);
         });
-        
-        modelBuilder.Entity<MeasureUnit>(entity =>
+
+        modelBuilder.Entity<CategoryParameter>(entity =>
+        {
+            entity.HasKey(e => e.Id); 
+            entity.Property(e => e.CategoryId).IsRequired();
+            entity.Property(e => e.ParameterId).IsRequired();
+            entity.HasOne(e => e.Category).WithMany(e => e.CategoryParameters).HasForeignKey(e => e.CategoryId);
+            entity.HasOne(e => e.Parameter).WithMany(e => e.CategoryParameters).HasForeignKey(e => e.ParameterId);
+        });
+
+        modelBuilder.Entity<AssetCategoryParameter>(entity =>
         {
             entity.HasKey(e => e.Id);
-            entity.Property(e => e.Name).IsRequired();
-            entity.HasMany(e => e.Parameters).WithOne(e => e.MeasureUnit);
+            entity.Property(e => e.AssetId).IsRequired();
+            entity.Property(e => e.Value).IsRequired();
+            entity.HasOne(e => e.Asset).WithMany(e => e.Categories).HasForeignKey(e => e.AssetId);
+            entity.HasOne(e => e.CategoryParameter).WithMany(e => e.AssetCategoryParameters).HasForeignKey(e => e.CategoryParameterId);
         });
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Server;
@@ -11,9 +12,11 @@ using Server;
 namespace Server.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240209052237_FixModelsRelations2")]
+    partial class FixModelsRelations2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,9 +59,6 @@ namespace Server.Migrations
                     b.Property<Guid>("CategoryParameterId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("TypeCode")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Value")
                         .IsRequired()
                         .HasColumnType("text");
@@ -95,43 +95,43 @@ namespace Server.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("f4695b6e-8f3f-4aec-b67d-ff4e70b7efc0"),
+                            Id = new Guid("e19518a5-797e-46b1-b8c1-f0cbe9e800fc"),
                             Name = "Жилой комплекс",
                             UseForApi = true
                         },
                         new
                         {
-                            Id = new Guid("f1ce8c18-7202-4060-a52f-87b03f8681be"),
+                            Id = new Guid("f7be5453-2cab-4638-aaf6-0a20102a77da"),
                             Name = "Дом",
                             UseForApi = true
                         },
                         new
                         {
-                            Id = new Guid("30dd86f1-4684-4fa2-88d1-fb48f8b0bbaa"),
+                            Id = new Guid("6cdb706f-3320-492a-b103-ba1ee48b61a2"),
                             Name = "Квартира",
                             UseForApi = true
                         },
                         new
                         {
-                            Id = new Guid("a22ea67a-e82b-4708-b473-b55e7e893a7b"),
+                            Id = new Guid("4c29fda8-5a57-4604-9f9f-2c684445a92b"),
                             Name = "Подъезд",
                             UseForApi = true
                         },
                         new
                         {
-                            Id = new Guid("67c40cb8-a870-4a14-b438-8e929b944f4b"),
+                            Id = new Guid("fc52731f-dda1-47a5-98ea-fec15e25b4ce"),
                             Name = "Этаж",
                             UseForApi = true
                         },
                         new
                         {
-                            Id = new Guid("ff75070d-68ed-4ed3-8adc-0abb904a7c73"),
+                            Id = new Guid("10f87ec1-1dea-417b-96b5-e587fb30be95"),
                             Name = "Игровая площадка",
                             UseForApi = true
                         },
                         new
                         {
-                            Id = new Guid("c813864e-f33f-4a45-a3bf-89af74e5bafd"),
+                            Id = new Guid("cff366a8-61c0-40bd-ba7a-0164547b29ba"),
                             Name = "Детсткая площадка",
                             UseForApi = true
                         });
@@ -167,9 +167,6 @@ namespace Server.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<int>("TypeCode")
-                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 

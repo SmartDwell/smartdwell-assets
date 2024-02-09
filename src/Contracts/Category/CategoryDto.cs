@@ -1,9 +1,11 @@
-namespace Models;
+using Contracts.Parameter;
+
+namespace Contracts.Category;
 
 /// <summary>
-/// Актив.
+/// Модель категории.
 /// </summary>
-public sealed class Asset
+public class CategoryDto
 {
     /// <summary>
     /// Идентификатор.
@@ -19,14 +21,14 @@ public sealed class Asset
     /// Описание.
     /// </summary>
     public string? Description { get; set; }
-
+    
     /// <summary>
-    /// Идентификаторы изображений.
+    /// Признак использования в API.
     /// </summary>
-    public ICollection<Guid> Images { get; set; } = [];
-
+    public bool UseForApi { get; set; }
+    
     /// <summary>
-    /// Категории.
+    /// Параметры.
     /// </summary>
-    public ICollection<AssetCategoryParameter> Categories { get; set; } = [];
+    public ICollection<ParameterDto> Parameters { get; set; } = [];
 }

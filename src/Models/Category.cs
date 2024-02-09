@@ -3,7 +3,7 @@ namespace Models;
 /// <summary>
 /// Категория.
 /// </summary>
-public class Category
+public sealed class Category
 {
     /// <summary>
     /// Идентификатор.
@@ -26,12 +26,7 @@ public class Category
     public bool UseForApi { get; set; }
 
     /// <summary>
-    /// Параметры.
+    /// Параметры категории.
     /// </summary>
-    public virtual ICollection<Parameter> Parameters { get; set; } = [];
-
-    /// <summary>
-    /// Активы.
-    /// </summary>
-    public virtual ICollection<Asset> Assets { get; set; } = [];
+    public ICollection<CategoryParameter> CategoryParameters { get; set; } = [];
 }

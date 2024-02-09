@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Server;
@@ -11,9 +12,11 @@ using Server;
 namespace Server.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240208060457_FixModels")]
+    partial class FixModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,21 @@ namespace Server.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("AssetCategory", b =>
+                {
+                    b.Property<Guid>("AssetsId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CategoriesId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("AssetsId", "CategoriesId");
+
+                    b.HasIndex("CategoriesId");
+
+                    b.ToTable("AssetCategory");
+                });
 
             modelBuilder.Entity("Models.Asset", b =>
                 {
@@ -42,34 +60,6 @@ namespace Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Assets");
-                });
-
-            modelBuilder.Entity("Models.AssetCategoryParameter", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("AssetId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("CategoryParameterId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("TypeCode")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AssetId");
-
-                    b.HasIndex("CategoryParameterId");
-
-                    b.ToTable("AssetCategoryParameters");
                 });
 
             modelBuilder.Entity("Models.Category", b =>
@@ -95,45 +85,45 @@ namespace Server.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("f4695b6e-8f3f-4aec-b67d-ff4e70b7efc0"),
+                            Id = new Guid("c21aac11-ddfb-49d1-9bf1-71f44cb2ba1d"),
                             Name = "Жилой комплекс",
-                            UseForApi = true
+                            UseForApi = false
                         },
                         new
                         {
-                            Id = new Guid("f1ce8c18-7202-4060-a52f-87b03f8681be"),
+                            Id = new Guid("7d3e79d2-b3db-44ec-803b-870359d5b5aa"),
                             Name = "Дом",
-                            UseForApi = true
+                            UseForApi = false
                         },
                         new
                         {
-                            Id = new Guid("30dd86f1-4684-4fa2-88d1-fb48f8b0bbaa"),
+                            Id = new Guid("3607ebb5-8fbe-470c-a8c7-f67d441ddbe0"),
                             Name = "Квартира",
-                            UseForApi = true
+                            UseForApi = false
                         },
                         new
                         {
-                            Id = new Guid("a22ea67a-e82b-4708-b473-b55e7e893a7b"),
+                            Id = new Guid("38b48a67-a5de-4c49-a17d-5ee2dc860586"),
                             Name = "Подъезд",
-                            UseForApi = true
+                            UseForApi = false
                         },
                         new
                         {
-                            Id = new Guid("67c40cb8-a870-4a14-b438-8e929b944f4b"),
+                            Id = new Guid("6955f376-e26f-46ab-aa2c-68842b9ec626"),
                             Name = "Этаж",
-                            UseForApi = true
+                            UseForApi = false
                         },
                         new
                         {
-                            Id = new Guid("ff75070d-68ed-4ed3-8adc-0abb904a7c73"),
+                            Id = new Guid("59fd629b-edc1-472c-bf19-dc419ba31bcf"),
                             Name = "Игровая площадка",
-                            UseForApi = true
+                            UseForApi = false
                         },
                         new
                         {
-                            Id = new Guid("c813864e-f33f-4a45-a3bf-89af74e5bafd"),
+                            Id = new Guid("92ea86e1-f7d0-4c47-bc9f-a4915b57cfca"),
                             Name = "Детсткая площадка",
-                            UseForApi = true
+                            UseForApi = false
                         });
                 });
 
@@ -148,6 +138,14 @@ namespace Server.Migrations
 
                     b.Property<Guid>("ParameterId")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -168,31 +166,24 @@ namespace Server.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("TypeCode")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
                     b.ToTable("Parameters");
                 });
 
-            modelBuilder.Entity("Models.AssetCategoryParameter", b =>
+            modelBuilder.Entity("AssetCategory", b =>
                 {
-                    b.HasOne("Models.Asset", "Asset")
-                        .WithMany("Categories")
-                        .HasForeignKey("AssetId")
+                    b.HasOne("Models.Asset", null)
+                        .WithMany()
+                        .HasForeignKey("AssetsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Models.CategoryParameter", "CategoryParameter")
-                        .WithMany("AssetCategoryParameters")
-                        .HasForeignKey("CategoryParameterId")
+                    b.HasOne("Models.Category", null)
+                        .WithMany()
+                        .HasForeignKey("CategoriesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Asset");
-
-                    b.Navigation("CategoryParameter");
                 });
 
             modelBuilder.Entity("Models.CategoryParameter", b =>
@@ -214,19 +205,9 @@ namespace Server.Migrations
                     b.Navigation("Parameter");
                 });
 
-            modelBuilder.Entity("Models.Asset", b =>
-                {
-                    b.Navigation("Categories");
-                });
-
             modelBuilder.Entity("Models.Category", b =>
                 {
                     b.Navigation("CategoryParameters");
-                });
-
-            modelBuilder.Entity("Models.CategoryParameter", b =>
-                {
-                    b.Navigation("AssetCategoryParameters");
                 });
 
             modelBuilder.Entity("Models.Parameter", b =>

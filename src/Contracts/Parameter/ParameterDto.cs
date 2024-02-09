@@ -1,14 +1,14 @@
-namespace Contracts.MeasureUnit;
+namespace Contracts.Parameter;
 
 /// <summary>
-/// Модель для обновления единицы измерения.
+/// Модель параметра.
 /// </summary>
-public class MeasureUnitPutDto
+public class ParameterDto
 {
     /// <summary>
     /// Идентификатор.
     /// </summary>
-    public Guid? Id { get; set; }
+    public Guid Id { get; set; }
     
     /// <summary>
     /// Наименование.

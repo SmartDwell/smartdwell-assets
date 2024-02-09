@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Server;
@@ -11,9 +12,11 @@ using Server;
 namespace Server.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240209044652_FixModelsRelations")]
+    partial class FixModelsRelations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,11 +56,11 @@ namespace Server.Migrations
                     b.Property<Guid>("AssetId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("CategoryParameterId")
+                    b.Property<Guid>("CategoryId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("TypeCode")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("ParameterId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Value")
                         .IsRequired()
@@ -67,7 +70,9 @@ namespace Server.Migrations
 
                     b.HasIndex("AssetId");
 
-                    b.HasIndex("CategoryParameterId");
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("ParameterId");
 
                     b.ToTable("AssetCategoryParameters");
                 });
@@ -95,67 +100,46 @@ namespace Server.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("f4695b6e-8f3f-4aec-b67d-ff4e70b7efc0"),
+                            Id = new Guid("98ea91df-29ea-4bdf-a9fc-1388cf7b1626"),
                             Name = "Жилой комплекс",
                             UseForApi = true
                         },
                         new
                         {
-                            Id = new Guid("f1ce8c18-7202-4060-a52f-87b03f8681be"),
+                            Id = new Guid("4e5bcb49-72f9-4170-a3cd-63403a26a22c"),
                             Name = "Дом",
                             UseForApi = true
                         },
                         new
                         {
-                            Id = new Guid("30dd86f1-4684-4fa2-88d1-fb48f8b0bbaa"),
+                            Id = new Guid("d115b165-04c1-4fc7-8876-c58c8b71e6e6"),
                             Name = "Квартира",
                             UseForApi = true
                         },
                         new
                         {
-                            Id = new Guid("a22ea67a-e82b-4708-b473-b55e7e893a7b"),
+                            Id = new Guid("55695105-16cd-41db-a32c-3049133c5aa5"),
                             Name = "Подъезд",
                             UseForApi = true
                         },
                         new
                         {
-                            Id = new Guid("67c40cb8-a870-4a14-b438-8e929b944f4b"),
+                            Id = new Guid("3ddcaf35-e4dc-4537-9ac9-05f227f657e3"),
                             Name = "Этаж",
                             UseForApi = true
                         },
                         new
                         {
-                            Id = new Guid("ff75070d-68ed-4ed3-8adc-0abb904a7c73"),
+                            Id = new Guid("c7d8cb3a-0f45-454b-bc35-5730f376cc5b"),
                             Name = "Игровая площадка",
                             UseForApi = true
                         },
                         new
                         {
-                            Id = new Guid("c813864e-f33f-4a45-a3bf-89af74e5bafd"),
+                            Id = new Guid("55c895fc-a8bc-4f47-9125-88076dad87fd"),
                             Name = "Детсткая площадка",
                             UseForApi = true
                         });
-                });
-
-            modelBuilder.Entity("Models.CategoryParameter", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("CategoryId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ParameterId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("ParameterId");
-
-                    b.ToTable("CategoryParameters");
                 });
 
             modelBuilder.Entity("Models.Parameter", b =>
@@ -167,9 +151,6 @@ namespace Server.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<int>("TypeCode")
-                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -184,19 +165,6 @@ namespace Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Models.CategoryParameter", "CategoryParameter")
-                        .WithMany("AssetCategoryParameters")
-                        .HasForeignKey("CategoryParameterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Asset");
-
-                    b.Navigation("CategoryParameter");
-                });
-
-            modelBuilder.Entity("Models.CategoryParameter", b =>
-                {
                     b.HasOne("Models.Category", "Category")
                         .WithMany("CategoryParameters")
                         .HasForeignKey("CategoryId")
@@ -208,6 +176,8 @@ namespace Server.Migrations
                         .HasForeignKey("ParameterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Asset");
 
                     b.Navigation("Category");
 
@@ -222,11 +192,6 @@ namespace Server.Migrations
             modelBuilder.Entity("Models.Category", b =>
                 {
                     b.Navigation("CategoryParameters");
-                });
-
-            modelBuilder.Entity("Models.CategoryParameter", b =>
-                {
-                    b.Navigation("AssetCategoryParameters");
                 });
 
             modelBuilder.Entity("Models.Parameter", b =>
