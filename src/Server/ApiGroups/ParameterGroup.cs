@@ -18,23 +18,24 @@ public static class ParameterGroup
     /// <param name="endpoints">Маршруты.</param>
     public static void MapParameterGroup(this IEndpointRouteBuilder endpoints)
     {
-        var group = endpoints.MapGroup(RouteConstants.ParameterData.Route);
-        group.MapGet(RouteConstants.Base, GetParameters)
+        var group = endpoints.MapGroup(string.Empty);
+            //.RequireAuthorization();
+        group.MapGet(RouteConstants.ParameterData.ParametersUrl, GetParameters)
             .Produces<ParameterDto[]>()
             .WithName("GetParameters")
             .WithSummary("Получение списка параметров")
             .WithOpenApi(); 
-        group.MapGet(RouteConstants.ById, GetParameterById)
+        group.MapGet(RouteConstants.ParameterData.ParameterByIdUrl, GetParameterById)
             .Produces<ParameterDto>()
             .WithName("GetParameterById")
             .WithSummary("Получение параметра по идентификатору")
             .WithOpenApi();
-        group.MapPut(RouteConstants.Base, PutParameter)
+        group.MapPut(RouteConstants.ParameterData.ParameterPutUrl, PutParameter)
             .Produces<ParameterDto>()
             .WithName("PutParameter")
             .WithSummary("Создание/обновление параметра")
             .WithOpenApi();
-        group.MapDelete(RouteConstants.ById, DeleteParameter)
+        group.MapDelete(RouteConstants.ParameterData.ParameterDeleteUrl, DeleteParameter)
             .WithName("DeleteParameter")
             .WithSummary("Удаление параметра")
             .WithOpenApi();

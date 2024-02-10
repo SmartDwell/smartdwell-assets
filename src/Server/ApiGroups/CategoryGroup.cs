@@ -19,23 +19,24 @@ public static class CategoryGroup
     /// <param name="endpoints">Маршруты.</param>
     public static void MapCategoryGroup(this IEndpointRouteBuilder endpoints)
     {
-        var group = endpoints.MapGroup(RouteConstants.CategoryData.Route);
-        group.MapGet(RouteConstants.Base, GetCategories)
+        var group = endpoints.MapGroup(string.Empty);
+            //.RequireAuthorization();
+        group.MapGet(RouteConstants.CategoryData.CategoriesUrl, GetCategories)
             .Produces<CategoryDto[]>()
             .WithName("GetCategories")
             .WithSummary("Получение списка категорий")
             .WithOpenApi(); 
-        group.MapGet(RouteConstants.ById, GetCategoryById)
+        group.MapGet(RouteConstants.CategoryData.CategoryByIdUrl, GetCategoryById)
             .Produces<CategoryDto>()
             .WithName("GetCategoryById")
             .WithSummary("Получение категории по идентификатору")
             .WithOpenApi();
-        group.MapPut(RouteConstants.Base, PutCategory)
+        group.MapPut(RouteConstants.CategoryData.CategoryPutUrl, PutCategory)
             .Produces<CategoryDto>()
             .WithName("PutCategory")
             .WithSummary("Создание/обновление категории")
             .WithOpenApi();
-        group.MapDelete(RouteConstants.ById, DeleteCategory)
+        group.MapDelete(RouteConstants.CategoryData.CategoryDeleteUrl, DeleteCategory)
             .WithName("DeleteCategory")
             .WithSummary("Удаление категории")
             .WithOpenApi();
@@ -45,12 +46,16 @@ public static class CategoryGroup
     {
         return TypedResults.Ok(context.Categories
             .Include(e => e.CategoryParameters)
+            .ThenInclude(cp => cp.Parameter)
             .Adapt<CategoryDto[]>());
     }
     
     private static async Task<IResult> GetCategoryById(DatabaseContext context, [FromRoute] Guid id)
     {
-        var category = await context.Categories.FindAsync(id);
+        var categories = await context.Categories
+            .Include(e => e.CategoryParameters)
+            .ThenInclude(cp => cp.Parameter).ToListAsync();
+        var category = categories.FirstOrDefault(e => e.Id == id);
         return category is null 
             ? TypedResults.NotFound("Категория не найдена") 
             : TypedResults.Ok(category.Adapt<CategoryDto>());

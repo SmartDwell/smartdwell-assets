@@ -6,16 +6,6 @@ namespace Server.Constants;
 public static class RouteConstants
 {
     /// <summary>
-    /// Базовый маршрут.
-    /// </summary>
-    public const string Base = "/";
-        
-    /// <summary>
-    /// Доступ по идентификатору.
-    /// </summary>
-    public const string ById = "/{id:guid}";
-    
-    /// <summary>
     /// Данные актива.
     /// </summary>
     public static class AssetData
@@ -35,6 +25,26 @@ public static class RouteConstants
         /// Базовый маршрут.
         /// </summary>
         public const string Route = "/api/categories";
+        
+        /// <summary>
+        /// Маршрут для получения всех категорий.
+        /// </summary>
+        public const string CategoriesUrl = Route;
+        
+        /// <summary>
+        /// Маршрут для получения категории по идентификатору.
+        /// </summary>
+        public const string CategoryByIdUrl = $$"""{{Route}}/{id:guid}""";
+        
+        /// <summary>
+        /// Маршрут для создания/обновления категории.
+        /// </summary>
+        public const string CategoryPutUrl = Route;
+        
+        /// <summary>
+        /// Маршрут для удаления категории.
+        /// </summary>
+        public const string CategoryDeleteUrl = $$"""{{Route}}/{id:guid}""";
     }
     
     /// <summary>
@@ -45,17 +55,26 @@ public static class RouteConstants
         /// <summary>
         /// Базовый маршрут.
         /// </summary>
-        public const string Route = "/api/parameters";
-    }
-    
-    /// <summary>
-    /// Данные единицы измерения.
-    /// </summary>
-    public static class MeasureUnitData
-    {
+        private const string Route = "/api/parameters";
+
         /// <summary>
-        /// Базовый маршрут.
+        /// Маршрут для получения всех параметров.
         /// </summary>
-        public const string Route = "/api/measure-units";
+        public const string ParametersUrl = Route;
+        
+        /// <summary>
+        /// Маршрут для получения параметра по идентификатору.
+        /// </summary>
+        public const string ParameterByIdUrl = $$"""{{Route}}/{id:guid}""";
+        
+        /// <summary>
+        /// Маршрут для создания/обновления параметра.
+        /// </summary>
+        public const string ParameterPutUrl = Route;
+        
+        /// <summary>
+        /// Маршрут для удаления параметра.
+        /// </summary>
+        public const string ParameterDeleteUrl = $$"""{{Route}}/{id:guid}""";
     }
 }

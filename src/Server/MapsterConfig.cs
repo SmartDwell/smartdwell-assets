@@ -56,11 +56,11 @@ internal static class MapsterConfig
         #region CategoryParameter
         
         TypeAdapterConfig<CategoryParameter, ParameterDto>.NewConfig()
-            .Map(dest => dest.Id, src => src.Id)
+            .Map(dest => dest.Id, src => src.Parameter.Id)
             .Map(dest => dest.Name, src => src.Parameter.Name);
         
         TypeAdapterConfig<CategoryParameter, Parameter>.NewConfig()
-            .Map(dest => dest.Id, src => src.ParameterId)
+            .Map(dest => dest.Id, src => src.Parameter.Id)
             .Map(dest => dest.Name, src => src.Parameter.Name);
         
         #endregion
