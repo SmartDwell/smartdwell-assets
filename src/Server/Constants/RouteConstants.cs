@@ -13,7 +13,15 @@ public static class RouteConstants
         /// <summary>
         /// Базовый маршрут.
         /// </summary>
-        public const string Route = "/api/assets";
+        private const string Route = "/api/assets";
+        
+        public const string AssetsUrl = Route;
+        
+        public const string AssetByIdUrl = $$"""{{Route}}/{id:guid}""";
+        
+        public const string AssetPutUrl = Route;
+        
+        public const string AssetDeleteUrl = $$"""{{Route}}/{id:guid}""";
     }
     
     /// <summary>
@@ -24,7 +32,7 @@ public static class RouteConstants
         /// <summary>
         /// Базовый маршрут.
         /// </summary>
-        public const string Route = "/api/categories";
+        private const string Route = "/api/categories";
         
         /// <summary>
         /// Маршрут для получения всех категорий.

@@ -109,6 +109,12 @@ public static class CategoryGroup
         if (category is null)
             return TypedResults.NotFound("Категория не найдена");
         
+        var categoryParameters = await context.CategoryParameters.Where(e => e.CategoryId == id).ToListAsync();
+        var categoryParametersIds = categoryParameters.Select(e => e.Id).ToHashSet();
+        var assetCategoryParameters = await context.AssetCategoryParameters.Where(e => categoryParametersIds.Contains(e.CategoryParameterId)).ToListAsync();
+        
+        context.AssetCategoryParameters.RemoveRange(assetCategoryParameters);
+        context.CategoryParameters.RemoveRange(categoryParameters);
         context.Categories.Remove(category);
         await context.SaveChangesAsync();
         return TypedResults.Ok();
