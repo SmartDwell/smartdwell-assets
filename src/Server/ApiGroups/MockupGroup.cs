@@ -1,3 +1,4 @@
+using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using Models;
 
@@ -65,15 +66,15 @@ public static class MockupGroup
 
         var parameters = new List<Parameter>
         {
-            new() {Id = Guid.NewGuid(), Name = "Площадь"},
-            new() {Id = Guid.NewGuid(), Name = "Количество комнат"},
-            new() {Id = Guid.NewGuid(), Name = "Этаж"},
-            new() {Id = Guid.NewGuid(), Name = "Количество домов"},
-            new() {Id = Guid.NewGuid(), Name = "Количество этажей"},
-            new() {Id = Guid.NewGuid(), Name = "Количество подъездов"},
-            new() {Id = Guid.NewGuid(), Name = "Количество квартир"},
-            new() {Id = Guid.NewGuid(), Name = "Количество машиномест"},
-            new() {Id = Guid.NewGuid(), Name = "Количество спортивных площадок"},
+            new() {Id = Guid.NewGuid(), Name = "Площадь", TypeCode = TypeCode.Double},
+            new() {Id = Guid.NewGuid(), Name = "Количество комнат", TypeCode = TypeCode.Int32},
+            new() {Id = Guid.NewGuid(), Name = "Этаж", TypeCode = TypeCode.Int32},
+            new() {Id = Guid.NewGuid(), Name = "Количество домов", TypeCode = TypeCode.Int32},
+            new() {Id = Guid.NewGuid(), Name = "Количество этажей", TypeCode = TypeCode.Int32},
+            new() {Id = Guid.NewGuid(), Name = "Количество подъездов", TypeCode = TypeCode.Int32},
+            new() {Id = Guid.NewGuid(), Name = "Количество квартир", TypeCode = TypeCode.Int32},
+            new() {Id = Guid.NewGuid(), Name = "Количество машиномест", TypeCode = TypeCode.Int32},
+            new() {Id = Guid.NewGuid(), Name = "Количество спортивных площадок", TypeCode = TypeCode.Int32},
         };
 
         var categoryParameters = new List<CategoryParameter>
@@ -202,7 +203,7 @@ public static class MockupGroup
             
             new() { Id = Guid.NewGuid(), AssetId = assets[2].Id, CategoryParameterId = categoryParameters[4].Id, Value = "3", TypeCode = TypeCode.Int32 },  // Дом А3 - Количество этажей
             new() { Id = Guid.NewGuid(), AssetId = assets[2].Id, CategoryParameterId = categoryParameters[5].Id, Value = "2", TypeCode = TypeCode.Int32 },  // Дом А3 - Количество подъездов
-            new() { Id = Guid.NewGuid(), AssetId = assets[2].Id, CategoryParameterId = categoryParameters[6].Id, Value = "12", TypeCode = TypeCode.Int32 },  // Дом А3 - Количество квартир
+            new() { Id = Guid.NewGuid(), AssetId = assets[2].Id, CategoryParameterId = categoryParameters[6].Id, Value = "12", TypeCode = TypeCode.Int32 }, // Дом А3 - Количество квартир
             new() { Id = Guid.NewGuid(), AssetId = assets[2].Id, CategoryParameterId = categoryParameters[7].Id, Value = "0", TypeCode = TypeCode.Int32 },  // Дом А3 - Количество машиномест
             
             new() { Id = Guid.NewGuid(), AssetId = assets[3].Id, CategoryParameterId = categoryParameters[8].Id, Value = "3", TypeCode = TypeCode.Int32 },  // Дом А2 - Подъезд 1 - Количество этажей
@@ -217,6 +218,37 @@ public static class MockupGroup
             new() { Id = Guid.NewGuid(), AssetId = assets[6].Id, CategoryParameterId = categoryParameters[8].Id, Value = "3", TypeCode = TypeCode.Int32 },  // Дом А3 - Подъезд 2 - Количество этажей
             new() { Id = Guid.NewGuid(), AssetId = assets[6].Id, CategoryParameterId = categoryParameters[9].Id, Value = "6", TypeCode = TypeCode.Int32 },  // Дом А3 - Подъезд 2 - Количество квартир
         };
+
+        for (var i = 0; i <= 23; ++i)
+        {
+            var index = i + 7;
+            var square = Math.Round(50 + i * 0.5, 2);
+            var roomCount = i % 6 + 1;
+            assetsCategories.Add(new AssetCategoryParameter
+            {
+                Id = Guid.NewGuid(),
+                AssetId = assets[index].Id,
+                CategoryParameterId = categoryParameters[10].Id,
+                Value = (-1).ToString(),
+                TypeCode = TypeCode.Int32
+            }); // Квартира - Подъезд - Дом - Этаж
+            assetsCategories.Add(new AssetCategoryParameter
+            {
+                Id = Guid.NewGuid(),
+                AssetId = assets[index].Id,
+                CategoryParameterId = categoryParameters[11].Id,
+                Value = square.ToString(CultureInfo.CurrentCulture),
+                TypeCode = TypeCode.Double
+            }); // Квартира - Подъезд - Дом - Площадь
+            assetsCategories.Add(new AssetCategoryParameter
+            {
+                Id = Guid.NewGuid(),
+                AssetId = assets[index].Id,
+                CategoryParameterId = categoryParameters[12].Id,
+                Value = roomCount.ToString(),
+                TypeCode = TypeCode.Int32
+            }); // Квартира - Подъезд - Дом - Количество комнат
+        }
         
         await context.Assets.AddRangeAsync(assets);
         await context.AssetParents.AddRangeAsync(assetParents);

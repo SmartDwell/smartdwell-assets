@@ -25,9 +25,9 @@ public class AssetPutDto
     public string? Description { get; set; }
 
     /// <summary>
-    /// Идентификаторы изображений.
+    /// Идентификаторы родительских активов.
     /// </summary>
-    public IList<Guid> Images { get; set; } = [];
+    public IList<Guid> Parents { get; set; } = [];
     
     /// <summary>
     /// Категории с параметрами.

@@ -7,21 +7,28 @@ using Server.Constants;
 
 namespace Server.ApiGroups;
 
+/// <summary>
+/// Группа для работы с активами.
+/// </summary>
 public static class AssetGroup
 {
+    /// <summary>
+    /// Маппинг группы для работы с активами.
+    /// </summary>
+    /// <param name="endpoints">Маршруты.</param>
     public static void MapAssetGroup(this IEndpointRouteBuilder endpoints)
     {
         var group = endpoints.MapGroup(string.Empty);
         //.RequireAuthorization();
         group.MapGet(RouteConstants.AssetData.AssetsUrl, GetAssets)
-            //.Produces<AssetDto[]>()
+            .Produces<AssetDto[]>()
             .WithName("GetAssets")
             .WithSummary("Получение списка активов")
             .WithOpenApi();
-        group.MapGet(RouteConstants.AssetData.AssetByIdUrl, GetAssetById)
-            .Produces<AssetDto>()
-            .WithName("GetAssetById")
-            .WithSummary("Получение актива по идентификатору")
+        group.MapGet(RouteConstants.AssetData.AssetByIdUrl, GetDetailedAssetById)
+            .Produces<AssetDetailedDto>()
+            .WithName("GetDetailedAssetById")
+            .WithSummary("Получение детальной информации об активе")
             .WithOpenApi();
         group.MapPut(RouteConstants.AssetData.AssetPutUrl, PutAsset)
             .Produces<AssetDto>()
@@ -38,21 +45,28 @@ public static class AssetGroup
     {
         return TypedResults.Ok(context.Assets
             .Include(e => e.Categories)
-            .ThenInclude(c => c.CategoryParameter)
-            .ThenInclude(cp => cp.Category)
+                .ThenInclude(c => c.CategoryParameter)
+                    .ThenInclude(cp => cp.Category)
             .Adapt<AssetDto[]>());
     }
 
-    private static async Task<IResult> GetAssetById(DatabaseContext context, [FromRoute] Guid id)
+    private static async Task<IResult> GetDetailedAssetById(DatabaseContext context, [FromRoute] Guid id)
     {
         var assets = await context.Assets
+            .Where(e => e.Id == id)
+            .Include(e => e.Parents)
+                .ThenInclude(p => p.Parent)
             .Include(e => e.Categories)
-            .ThenInclude(c => c.CategoryParameter)
-            .ThenInclude(cp => cp.Parameter).ToListAsync();
-        var asset = assets.FirstOrDefault(e => e.Id == id);
+                .ThenInclude(c => c.CategoryParameter)
+                    .ThenInclude(cp => cp.Parameter)
+            .Include(e => e.Categories)
+                .ThenInclude(c => c.CategoryParameter)
+                .ThenInclude(cp => cp.Category)
+            .ToListAsync();
+        var asset = assets.FirstOrDefault();
         return asset is null
             ? TypedResults.NotFound("Актив не найден")
-            : TypedResults.Ok(asset.Adapt<AssetDto>());
+            : TypedResults.Ok(asset.Adapt<AssetDetailedDto>());
     }
 
     private static async Task<IResult> PutAsset(DatabaseContext context, [FromBody] AssetPutDto assetPutDto)
@@ -69,6 +83,11 @@ public static class AssetGroup
         foreach (var category in asset.Categories)
         {
             category.AssetId = asset.Id;
+        }
+
+        foreach (var parent in asset.Parents)
+        {
+            parent.AssetId = asset.Id;
         }
 
         await context.Assets.AddAsync(asset);
@@ -92,6 +111,10 @@ public static class AssetGroup
         context.AssetCategoryParameters.RemoveRange(context.AssetCategoryParameters.Where(e => e.AssetId == asset.Id));
         context.AssetCategoryParameters.AddRange(assetCategoryParameters);
 
+        var assetParents = assetPutDto.Parents.Select(id => new AssetParent { AssetId = asset.Id, ParentId = id }).ToList();
+        context.AssetParents.RemoveRange(context.AssetParents.Where(e => e.AssetId == asset.Id));
+        context.AssetParents.AddRange(assetParents);
+        
         context.Assets.Update(asset);
         await context.SaveChangesAsync();
         return TypedResults.Ok(asset.Adapt<AssetDto>());
