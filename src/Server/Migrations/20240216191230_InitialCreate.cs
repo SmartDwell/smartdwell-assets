@@ -42,82 +42,66 @@ namespace Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "MeasureUnits",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MeasureUnits", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AssetCategory",
-                columns: table => new
-                {
-                    AssetsId = table.Column<Guid>(type: "uuid", nullable: false),
-                    CategoriesId = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AssetCategory", x => new { x.AssetsId, x.CategoriesId });
-                    table.ForeignKey(
-                        name: "FK_AssetCategory_Assets_AssetsId",
-                        column: x => x.AssetsId,
-                        principalTable: "Assets",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AssetCategory_Categories_CategoriesId",
-                        column: x => x.CategoriesId,
-                        principalTable: "Categories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Parameters",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: true),
-                    Type = table.Column<int>(type: "integer", nullable: false),
-                    MeasureUnitId = table.Column<Guid>(type: "uuid", nullable: false)
+                    TypeCode = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Parameters", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CategoryParameters",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    CategoryId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ParameterId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CategoryParameters", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Parameters_MeasureUnits_MeasureUnitId",
-                        column: x => x.MeasureUnitId,
-                        principalTable: "MeasureUnits",
+                        name: "FK_CategoryParameters_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CategoryParameters_Parameters_ParameterId",
+                        column: x => x.ParameterId,
+                        principalTable: "Parameters",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "CategoryParameter",
+                name: "AssetCategoryParameters",
                 columns: table => new
                 {
-                    CategoriesId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ParametersId = table.Column<Guid>(type: "uuid", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    AssetId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CategoryParameterId = table.Column<Guid>(type: "uuid", nullable: false),
+                    TypeCode = table.Column<int>(type: "integer", nullable: false),
+                    Value = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CategoryParameter", x => new { x.CategoriesId, x.ParametersId });
+                    table.PrimaryKey("PK_AssetCategoryParameters", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CategoryParameter_Categories_CategoriesId",
-                        column: x => x.CategoriesId,
-                        principalTable: "Categories",
+                        name: "FK_AssetCategoryParameters_Assets_AssetId",
+                        column: x => x.AssetId,
+                        principalTable: "Assets",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CategoryParameter_Parameters_ParametersId",
-                        column: x => x.ParametersId,
-                        principalTable: "Parameters",
+                        name: "FK_AssetCategoryParameters_CategoryParameters_CategoryParamete~",
+                        column: x => x.CategoryParameterId,
+                        principalTable: "CategoryParameters",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -127,49 +111,53 @@ namespace Server.Migrations
                 columns: new[] { "Id", "Description", "Name", "UseForApi" },
                 values: new object[,]
                 {
-                    { new Guid("0bdcc048-c878-4cbd-9fe4-d24880c12971"), null, "Жилой комплекс", false },
-                    { new Guid("19311b9e-d865-476d-97f9-7ef81a1ea26f"), null, "Квартира", false },
-                    { new Guid("1cf8e33f-5256-4edd-a488-130c7fe06198"), null, "Подъезд", false },
-                    { new Guid("47999b03-4f36-420e-8000-b746fa4b9721"), null, "Дом", false },
-                    { new Guid("60ccb212-6c55-4d58-bbb8-bb6b2b83ab51"), null, "Этаж", false }
+                    { new Guid("0382490e-f9bd-470d-96fb-e1a32e7d4484"), null, "Детсткая площадка", true },
+                    { new Guid("1586fcef-f7f4-4248-9afb-03015c7c85be"), null, "Подъезд", true },
+                    { new Guid("44cd1fb4-61bb-4716-a5b1-b98cbdd42d70"), null, "Этаж", true },
+                    { new Guid("c94ff409-f973-4e3c-84aa-d66237b4749d"), null, "Жилой комплекс", true },
+                    { new Guid("cfece9ea-b049-46ff-933e-3c31567fde99"), null, "Дом", true },
+                    { new Guid("d1273eb5-7f0b-45b8-beb2-d1902f7a06b3"), null, "Квартира", true },
+                    { new Guid("e6313d91-a4d9-4278-83ba-248537bd538f"), null, "Игровая площадка", true }
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AssetCategory_CategoriesId",
-                table: "AssetCategory",
-                column: "CategoriesId");
+                name: "IX_AssetCategoryParameters_AssetId",
+                table: "AssetCategoryParameters",
+                column: "AssetId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CategoryParameter_ParametersId",
-                table: "CategoryParameter",
-                column: "ParametersId");
+                name: "IX_AssetCategoryParameters_CategoryParameterId",
+                table: "AssetCategoryParameters",
+                column: "CategoryParameterId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Parameters_MeasureUnitId",
-                table: "Parameters",
-                column: "MeasureUnitId");
+                name: "IX_CategoryParameters_CategoryId",
+                table: "CategoryParameters",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CategoryParameters_ParameterId",
+                table: "CategoryParameters",
+                column: "ParameterId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AssetCategory");
-
-            migrationBuilder.DropTable(
-                name: "CategoryParameter");
+                name: "AssetCategoryParameters");
 
             migrationBuilder.DropTable(
                 name: "Assets");
+
+            migrationBuilder.DropTable(
+                name: "CategoryParameters");
 
             migrationBuilder.DropTable(
                 name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "Parameters");
-
-            migrationBuilder.DropTable(
-                name: "MeasureUnits");
         }
     }
 }

@@ -12,8 +12,8 @@ using Server;
 namespace Server.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240209052237_FixModelsRelations2")]
-    partial class FixModelsRelations2
+    [Migration("20240218061816_FixCollectionInterface")]
+    partial class FixCollectionInterface
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -59,6 +59,9 @@ namespace Server.Migrations
                     b.Property<Guid>("CategoryParameterId")
                         .HasColumnType("uuid");
 
+                    b.Property<int>("TypeCode")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Value")
                         .IsRequired()
                         .HasColumnType("text");
@@ -95,43 +98,43 @@ namespace Server.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("e19518a5-797e-46b1-b8c1-f0cbe9e800fc"),
+                            Id = new Guid("9dfdffbb-78a0-403a-94ac-c488bd868234"),
                             Name = "Жилой комплекс",
                             UseForApi = true
                         },
                         new
                         {
-                            Id = new Guid("f7be5453-2cab-4638-aaf6-0a20102a77da"),
+                            Id = new Guid("3cfdb514-c921-427d-a27c-4efb988b1fc6"),
                             Name = "Дом",
                             UseForApi = true
                         },
                         new
                         {
-                            Id = new Guid("6cdb706f-3320-492a-b103-ba1ee48b61a2"),
+                            Id = new Guid("77a127d4-7fe0-4da7-ac5d-ffab026ed82d"),
                             Name = "Квартира",
                             UseForApi = true
                         },
                         new
                         {
-                            Id = new Guid("4c29fda8-5a57-4604-9f9f-2c684445a92b"),
+                            Id = new Guid("fda48a4b-e2b9-4e53-8e74-0a33837d565a"),
                             Name = "Подъезд",
                             UseForApi = true
                         },
                         new
                         {
-                            Id = new Guid("fc52731f-dda1-47a5-98ea-fec15e25b4ce"),
+                            Id = new Guid("e3de6611-da4a-409c-a3fb-c6e5a5cf454a"),
                             Name = "Этаж",
                             UseForApi = true
                         },
                         new
                         {
-                            Id = new Guid("10f87ec1-1dea-417b-96b5-e587fb30be95"),
+                            Id = new Guid("894b3e1a-7b3b-4c75-aa97-27fc288873d4"),
                             Name = "Игровая площадка",
                             UseForApi = true
                         },
                         new
                         {
-                            Id = new Guid("cff366a8-61c0-40bd-ba7a-0164547b29ba"),
+                            Id = new Guid("0e0cc9ec-4fd3-4d9f-9438-f47dec3482a4"),
                             Name = "Детсткая площадка",
                             UseForApi = true
                         });
@@ -167,6 +170,9 @@ namespace Server.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("TypeCode")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 

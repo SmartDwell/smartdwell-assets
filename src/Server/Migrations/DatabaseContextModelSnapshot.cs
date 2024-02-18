@@ -31,10 +31,6 @@ namespace Server.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.Property<Guid[]>("Images")
-                        .IsRequired()
-                        .HasColumnType("uuid[]");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
@@ -95,43 +91,43 @@ namespace Server.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("f4695b6e-8f3f-4aec-b67d-ff4e70b7efc0"),
+                            Id = new Guid("7beb46fe-cf06-4952-a412-f4a694bc521e"),
                             Name = "Жилой комплекс",
                             UseForApi = true
                         },
                         new
                         {
-                            Id = new Guid("f1ce8c18-7202-4060-a52f-87b03f8681be"),
+                            Id = new Guid("8699752c-0a1e-479a-9591-0115d3525d2b"),
                             Name = "Дом",
                             UseForApi = true
                         },
                         new
                         {
-                            Id = new Guid("30dd86f1-4684-4fa2-88d1-fb48f8b0bbaa"),
+                            Id = new Guid("b8683868-9dc3-4c81-aeae-60e048164067"),
                             Name = "Квартира",
                             UseForApi = true
                         },
                         new
                         {
-                            Id = new Guid("a22ea67a-e82b-4708-b473-b55e7e893a7b"),
+                            Id = new Guid("89c8b698-3b47-4dd6-ae5f-43dc0cd92fd0"),
                             Name = "Подъезд",
                             UseForApi = true
                         },
                         new
                         {
-                            Id = new Guid("67c40cb8-a870-4a14-b438-8e929b944f4b"),
+                            Id = new Guid("54bfc828-d1f7-4f7f-a887-497200168625"),
                             Name = "Этаж",
                             UseForApi = true
                         },
                         new
                         {
-                            Id = new Guid("ff75070d-68ed-4ed3-8adc-0abb904a7c73"),
+                            Id = new Guid("c3fd0053-bc6c-4298-a963-97d46832aae9"),
                             Name = "Игровая площадка",
                             UseForApi = true
                         },
                         new
                         {
-                            Id = new Guid("c813864e-f33f-4a45-a3bf-89af74e5bafd"),
+                            Id = new Guid("1a6f1bbe-e6ce-439d-9ee2-5f25607a0cca"),
                             Name = "Детсткая площадка",
                             UseForApi = true
                         });

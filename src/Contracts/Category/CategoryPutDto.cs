@@ -36,5 +36,5 @@ public class CategoryPutDto
     /// </summary>
     [Required(ErrorMessage = "Не указаны параметры категории.")]
     [MinLength(1, ErrorMessage = "Категория должна содержать хотя бы один параметр.")]
-    public ICollection<Guid> Parameters { get; set; } = [];
+    public IEnumerable<Guid> Parameters { get; set; } = [];
 }

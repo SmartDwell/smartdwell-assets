@@ -29,9 +29,10 @@ public sealed class CategoryParameter
     /// Параметр.
     /// </summary>
     public Parameter Parameter { get; set; } = null!;
-    
+
     /// <summary>
     /// Коллекция параметров категории актива.
     /// </summary>
-    public ICollection<AssetCategoryParameter> AssetCategoryParameters { get; set; } = null!;
+    public IEnumerable<AssetCategoryParameter> AssetCategoryParameters { get; set; } =
+        new List<AssetCategoryParameter>();
 }

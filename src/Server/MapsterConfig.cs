@@ -43,7 +43,7 @@ internal static class MapsterConfig
             .Map(dest => dest.Name, src => src.Name)
             .Map(dest => dest.Description, src => src.Description)
             .Map(dest => dest.UseForApi, src => src.UseForApi)
-            .Map(dest => dest.Parameters, src => src.CategoryParameters.Adapt<ICollection<ParameterDto>>());
+            .Map(dest => dest.Parameters, src => src.CategoryParameters.Adapt<ParameterDto[]>());
  
         TypeAdapterConfig<CategoryPutDto, Category>.NewConfig()
             .Map(dest => dest.Id, src => src.Id ?? Guid.Empty)
@@ -67,13 +67,12 @@ internal static class MapsterConfig
         #endregion
 
         #region Assets
-        
+
         TypeAdapterConfig<Asset, AssetDto>.NewConfig()
             .Map(dest => dest.Id, src => src.Id)
             .Map(dest => dest.Name, src => src.Name)
             .Map(dest => dest.Description, src => src.Description)
-            .Map(dest => dest.Images, src => src.Images)
-            .Map(dest => dest.Categories, src => src.Categories.Adapt<ICollection<CategoryBaseDto>>());
+            .Map(dest => dest.Categories, src => src.Categories.DistinctBy(category => category.CategoryParameter.CategoryId).Adapt<CategoryBaseDto[]>());
         
         TypeAdapterConfig<AssetCategoryParameter, CategoryBaseDto>.NewConfig()
             .Map(dest => dest.Id, src => src.CategoryParameter.Category.Id)
@@ -87,8 +86,7 @@ internal static class MapsterConfig
             .Map(dest => dest.Id, src => src.Id ?? Guid.Empty)
             .Map(dest => dest.Name, src => src.Name)
             .Map(dest => dest.Description, src => src.Description)
-            .Map(dest => dest.Images, src => src.Images)
-            .Map(dest => dest.Categories, src => src.Categories.Adapt<ICollection<AssetCategoryParameter>>());
+            .Map(dest => dest.Categories, src => src.Categories.Adapt<AssetCategoryParameter[]>());
         
         #endregion
     }

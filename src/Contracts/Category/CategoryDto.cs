@@ -30,5 +30,5 @@ public class CategoryDto
     /// <summary>
     /// Параметры.
     /// </summary>
-    public ICollection<ParameterDto> Parameters { get; set; } = [];
+    public IEnumerable<ParameterDto> Parameters { get; set; } = [];
 }

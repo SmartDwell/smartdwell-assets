@@ -28,5 +28,5 @@ public sealed class Category
     /// <summary>
     /// Параметры категории.
     /// </summary>
-    public ICollection<CategoryParameter> CategoryParameters { get; set; } = [];
+    public IEnumerable<CategoryParameter> CategoryParameters { get; set; } = new List<CategoryParameter>();
 }

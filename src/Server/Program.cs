@@ -31,5 +31,6 @@ app.UseHttpsRedirection();
 app.MapParameterGroup();
 app.MapCategoryGroup();
 app.MapAssetGroup();
+app.MapMockupGroup();
 
 app.Run();

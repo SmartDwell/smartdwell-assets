@@ -60,7 +60,6 @@ public sealed class DatabaseContext : DbContext
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Name).IsRequired();
             entity.Property(e => e.Description);
-            entity.Property(e => e.Images).IsRequired();
             entity.HasMany(e => e.Categories).WithOne(e => e.Asset).HasForeignKey(e => e.AssetId);
         });
         
@@ -69,7 +68,7 @@ public sealed class DatabaseContext : DbContext
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Name).IsRequired();
             entity.Property(e => e.Description);
-            entity.Property(e => e.UseForApi).IsRequired();
+            entity.Property(e => e.UseForApi);
             entity.HasMany(e => e.CategoryParameters).WithOne(e => e.Category).HasForeignKey(e => e.CategoryId);
             
             entity.HasData(
@@ -104,6 +103,7 @@ public sealed class DatabaseContext : DbContext
         {
             entity.HasKey(e => e.Id);
             entity.Property(e => e.AssetId).IsRequired();
+            entity.Property(e => e.CategoryParameterId).IsRequired();
             entity.Property(e => e.Value).IsRequired();
             entity.HasOne(e => e.Asset).WithMany(e => e.Categories).HasForeignKey(e => e.AssetId);
             entity.HasOne(e => e.CategoryParameter).WithMany(e => e.AssetCategoryParameters).HasForeignKey(e => e.CategoryParameterId);

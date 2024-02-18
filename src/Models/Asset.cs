@@ -21,12 +21,7 @@ public sealed class Asset
     public string? Description { get; set; }
 
     /// <summary>
-    /// Идентификаторы изображений.
-    /// </summary>
-    public ICollection<Guid> Images { get; set; } = [];
-
-    /// <summary>
     /// Категории.
     /// </summary>
-    public ICollection<AssetCategoryParameter> Categories { get; set; } = [];
+    public IEnumerable<AssetCategoryParameter> Categories { get; set; } = new List<AssetCategoryParameter>();
 }

@@ -27,10 +27,10 @@ public class AssetPutDto
     /// <summary>
     /// Идентификаторы изображений.
     /// </summary>
-    public ICollection<Guid> Images { get; set; } = [];
+    public IList<Guid> Images { get; set; } = [];
     
     /// <summary>
     /// Категории с параметрами.
     /// </summary>
-    public ICollection<AssetCategoryParameterPutDto> Categories { get; set; } = [];
+    public IEnumerable<AssetCategoryParameterPutDto> Categories { get; set; } = [];
 }

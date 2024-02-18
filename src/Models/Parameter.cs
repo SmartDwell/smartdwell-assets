@@ -14,11 +14,11 @@ public sealed class Parameter
     /// Наименование.
     /// </summary>
     public string Name { get; set; } = string.Empty;
- 
+
     /// <summary>
     /// Категории.
     /// </summary>
-    public ICollection<CategoryParameter> CategoryParameters { get; set; } = null!;
+    public IEnumerable<CategoryParameter> CategoryParameters { get; set; } = new List<CategoryParameter>();
     
     /// <summary>
     /// Тип значения.

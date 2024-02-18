@@ -21,14 +21,9 @@ public sealed class AssetDto
     /// Описание.
     /// </summary>
     public string? Description { get; set; }
-
-    /// <summary>
-    /// Идентификаторы изображений.
-    /// </summary>
-    public ICollection<Guid> Images { get; set; } = [];
     
     /// <summary>
     /// Категории.
     /// </summary>
-    public ICollection<CategoryBaseDto> Categories { get; set; } = [];
+    public IEnumerable<CategoryBaseDto> Categories { get; set; } = [];
 }
