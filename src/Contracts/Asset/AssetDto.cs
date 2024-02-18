@@ -21,6 +21,11 @@ public sealed class AssetDto
     /// Описание.
     /// </summary>
     public string? Description { get; set; }
+
+    /// <summary>
+    /// Родительские активы.
+    /// </summary>
+    public IEnumerable<AssetBaseDto> Parents { get; set; } = [];
     
     /// <summary>
     /// Категории.

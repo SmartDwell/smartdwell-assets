@@ -16,6 +16,11 @@ public sealed class DatabaseContext : DbContext
     public DbSet<Asset> Assets { get; set; } = null!;
 
     /// <summary>
+    /// Коллекция родительских активов.
+    /// </summary>
+    public DbSet<AssetParent> AssetParents { get; set; } = null!;
+    
+    /// <summary>
     /// Коллекция категорий.
     /// </summary>
     public DbSet<Category> Categories { get; set; } = null!;
@@ -60,7 +65,16 @@ public sealed class DatabaseContext : DbContext
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Name).IsRequired();
             entity.Property(e => e.Description);
+            entity.HasMany(e => e.Parents).WithOne(e => e.Asset).HasForeignKey(e => e.AssetId);
             entity.HasMany(e => e.Categories).WithOne(e => e.Asset).HasForeignKey(e => e.AssetId);
+        });
+        
+        modelBuilder.Entity<AssetParent>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.AssetId).IsRequired();
+            entity.Property(e => e.ParentId).IsRequired();
+            entity.HasOne(e => e.Parent).WithMany().HasForeignKey(e => e.ParentId);
         });
         
         modelBuilder.Entity<Category>(entity =>

@@ -3,8 +3,15 @@ using Models;
 
 namespace Server.ApiGroups;
 
+/// <summary>
+/// Группа для мокапов.
+/// </summary>
 public static class MockupGroup
 {
+    /// <summary>
+    /// Маппинг группы мокапов.
+    /// </summary>
+    /// <param name="endpoints"></param>
     public static void MapMockupGroup(this IEndpointRouteBuilder endpoints)
     {
         var group = endpoints.MapGroup(string.Empty);
@@ -93,17 +100,20 @@ public static class MockupGroup
         await context.Parameters.AddRangeAsync(parameters);
         await context.CategoryParameters.AddRangeAsync(categoryParameters);
         await context.SaveChangesAsync();
-
-        // TODO: Добавить родительские активы
+        
         var assets = new List<Asset>
         {
             new() {Id = Guid.NewGuid(), Name = "Новое время"},
+            
             new() {Id = Guid.NewGuid(), Name = "Дом А2"},
             new() {Id = Guid.NewGuid(), Name = "Дом А3"},
+            
             new() {Id = Guid.NewGuid(), Name = "Подъезд 1"},
             new() {Id = Guid.NewGuid(), Name = "Подъезд 2"},
             new() {Id = Guid.NewGuid(), Name = "Подъезд 1"},
             new() {Id = Guid.NewGuid(), Name = "Подъезд 2"},
+            
+            // 12 квартир в каждом доме (по 6 в каждом подъезде)
             new() {Id = Guid.NewGuid(), Name = "Квартира 1"},
             new() {Id = Guid.NewGuid(), Name = "Квартира 2"},
             new() {Id = Guid.NewGuid(), Name = "Квартира 3"},
@@ -116,37 +126,100 @@ public static class MockupGroup
             new() {Id = Guid.NewGuid(), Name = "Квартира 10"},
             new() {Id = Guid.NewGuid(), Name = "Квартира 11"},
             new() {Id = Guid.NewGuid(), Name = "Квартира 12"},
+            
+            new() {Id = Guid.NewGuid(), Name = "Квартира 1"},
+            new() {Id = Guid.NewGuid(), Name = "Квартира 2"},
+            new() {Id = Guid.NewGuid(), Name = "Квартира 3"},
+            new() {Id = Guid.NewGuid(), Name = "Квартира 4"},
+            new() {Id = Guid.NewGuid(), Name = "Квартира 5"},
+            new() {Id = Guid.NewGuid(), Name = "Квартира 6"},
+            new() {Id = Guid.NewGuid(), Name = "Квартира 7"},
+            new() {Id = Guid.NewGuid(), Name = "Квартира 8"},
+            new() {Id = Guid.NewGuid(), Name = "Квартира 9"},
+            new() {Id = Guid.NewGuid(), Name = "Квартира 10"},
+            new() {Id = Guid.NewGuid(), Name = "Квартира 11"},
+            new() {Id = Guid.NewGuid(), Name = "Квартира 12"},
+            
             new() {Id = Guid.NewGuid(), Name = "Спортивная площадка 1"},
             new() {Id = Guid.NewGuid(), Name = "Спортивная площадка 2"},
             new() {Id = Guid.NewGuid(), Name = "Детская площадка 1"},
+        };
+
+        var assetParents = new List<AssetParent>
+        {
+            new() { Id = Guid.NewGuid(), AssetId = assets[1].Id, ParentId = assets[0].Id }, // Дом А2 - Новое время
+            new() { Id = Guid.NewGuid(), AssetId = assets[2].Id, ParentId = assets[0].Id }, // Дом А3 - Новое время
+            
+            new() { Id = Guid.NewGuid(), AssetId = assets[3].Id, ParentId = assets[1].Id }, // Подъезд 1 - Дом А2
+            new() { Id = Guid.NewGuid(), AssetId = assets[4].Id, ParentId = assets[1].Id }, // Подъезд 2 - Дом А2
+            new() { Id = Guid.NewGuid(), AssetId = assets[5].Id, ParentId = assets[2].Id }, // Подъезд 1 - Дом А3
+            new() { Id = Guid.NewGuid(), AssetId = assets[6].Id, ParentId = assets[2].Id }, // Подъезд 2 - Дом А3
+            
+            new() { Id = Guid.NewGuid(), AssetId = assets[7].Id, ParentId = assets[3].Id }, // Квартира 1 - Подъезд 1 - Дом А2
+            new() { Id = Guid.NewGuid(), AssetId = assets[8].Id, ParentId = assets[3].Id }, // Квартира 2 - Подъезд 1 - Дом А2
+            new() { Id = Guid.NewGuid(), AssetId = assets[9].Id, ParentId = assets[3].Id }, // Квартира 3 - Подъезд 1 - Дом А2
+            new() { Id = Guid.NewGuid(), AssetId = assets[10].Id, ParentId = assets[3].Id }, // Квартира 4 - Подъезд 1 - Дом А2
+            new() { Id = Guid.NewGuid(), AssetId = assets[11].Id, ParentId = assets[3].Id }, // Квартира 5 - Подъезд 1 - Дом А2
+            new() { Id = Guid.NewGuid(), AssetId = assets[12].Id, ParentId = assets[3].Id }, // Квартира 6 - Подъезд 1 - Дом А2
+            new() { Id = Guid.NewGuid(), AssetId = assets[13].Id, ParentId = assets[4].Id }, // Квартира 7 - Подъезд 2 - Дом А2
+            new() { Id = Guid.NewGuid(), AssetId = assets[14].Id, ParentId = assets[4].Id }, // Квартира 8 - Подъезд 2 - Дом А2
+            new() { Id = Guid.NewGuid(), AssetId = assets[15].Id, ParentId = assets[4].Id }, // Квартира 9 - Подъезд 2 - Дом А2
+            new() { Id = Guid.NewGuid(), AssetId = assets[16].Id, ParentId = assets[4].Id }, // Квартира 10 - Подъезд 2 - Дом А2
+            new() { Id = Guid.NewGuid(), AssetId = assets[17].Id, ParentId = assets[4].Id }, // Квартира 11 - Подъезд 2 - Дом А2
+            new() { Id = Guid.NewGuid(), AssetId = assets[18].Id, ParentId = assets[4].Id }, // Квартира 12 - Подъезд 2 - Дом А2
+            
+            new() { Id = Guid.NewGuid(), AssetId = assets[19].Id, ParentId = assets[5].Id }, // Квартира 1 - Подъезд 1 - Дом А3
+            new() { Id = Guid.NewGuid(), AssetId = assets[20].Id, ParentId = assets[5].Id }, // Квартира 2 - Подъезд 1 - Дом А3
+            new() { Id = Guid.NewGuid(), AssetId = assets[21].Id, ParentId = assets[5].Id }, // Квартира 3 - Подъезд 1 - Дом А3
+            new() { Id = Guid.NewGuid(), AssetId = assets[22].Id, ParentId = assets[5].Id }, // Квартира 4 - Подъезд 1 - Дом А3
+            new() { Id = Guid.NewGuid(), AssetId = assets[23].Id, ParentId = assets[5].Id }, // Квартира 5 - Подъезд 1 - Дом А3
+            new() { Id = Guid.NewGuid(), AssetId = assets[24].Id, ParentId = assets[5].Id }, // Квартира 6 - Подъезд 1 - Дом А3
+            new() { Id = Guid.NewGuid(), AssetId = assets[25].Id, ParentId = assets[6].Id }, // Квартира 7 - Подъезд 2 - Дом А3
+            new() { Id = Guid.NewGuid(), AssetId = assets[26].Id, ParentId = assets[6].Id }, // Квартира 8 - Подъезд 2 - Дом А3
+            new() { Id = Guid.NewGuid(), AssetId = assets[27].Id, ParentId = assets[6].Id }, // Квартира 9 - Подъезд 2 - Дом А3
+            new() { Id = Guid.NewGuid(), AssetId = assets[28].Id, ParentId = assets[6].Id }, // Квартира 10 - Подъезд 2 - Дом А3
+            new() { Id = Guid.NewGuid(), AssetId = assets[29].Id, ParentId = assets[6].Id }, // Квартира 11 - Подъезд 2 - Дом А3
+            new() { Id = Guid.NewGuid(), AssetId = assets[30].Id, ParentId = assets[6].Id }, // Квартира 12 - Подъезд 2 - Дом А3
+            
+            new() { Id = Guid.NewGuid(), AssetId = assets[31].Id, ParentId = assets[1].Id }, // Спортивная площадка 1 - Дом А2
+            new() { Id = Guid.NewGuid(), AssetId = assets[32].Id, ParentId = assets[2].Id }, // Спортивная площадка 2 - Дом А3
+            
+            new() { Id = Guid.NewGuid(), AssetId = assets[33].Id, ParentId = assets[1].Id }, // Детская площадка 1 - Дом А2
         };
         
         // TODO: Возможно, TypeCode не нужен
         var assetsCategories = new List<AssetCategoryParameter>
         {
-            new() { Id = Guid.NewGuid(), AssetId = assets[0].Id, CategoryParameterId = categoryParameters[0].Id, Value = "2", TypeCode = TypeCode.Int32 }, // Новое время - Количество домов
-            new() { Id = Guid.NewGuid(), AssetId = assets[0].Id, CategoryParameterId = categoryParameters[1].Id, Value = "12", TypeCode = TypeCode.Int32 },// Новое время - Количество квартир
-            new() { Id = Guid.NewGuid(), AssetId = assets[0].Id, CategoryParameterId = categoryParameters[2].Id, Value = "0", TypeCode = TypeCode.Int32 }, // Новое время - Количество машиномест
-            new() { Id = Guid.NewGuid(), AssetId = assets[0].Id, CategoryParameterId = categoryParameters[3].Id, Value = "2", TypeCode = TypeCode.Int32 }, // Новое время - Количество спортивных площадок
+            new() { Id = Guid.NewGuid(), AssetId = assets[0].Id, CategoryParameterId = categoryParameters[0].Id, Value = "2", TypeCode = TypeCode.Int32 },  // Новое время - Количество домов
+            new() { Id = Guid.NewGuid(), AssetId = assets[0].Id, CategoryParameterId = categoryParameters[1].Id, Value = "12", TypeCode = TypeCode.Int32 }, // Новое время - Количество квартир
+            new() { Id = Guid.NewGuid(), AssetId = assets[0].Id, CategoryParameterId = categoryParameters[2].Id, Value = "0", TypeCode = TypeCode.Int32 },  // Новое время - Количество машиномест
+            new() { Id = Guid.NewGuid(), AssetId = assets[0].Id, CategoryParameterId = categoryParameters[3].Id, Value = "2", TypeCode = TypeCode.Int32 },  // Новое время - Количество спортивных площадок
             
-            new() { Id = Guid.NewGuid(), AssetId = assets[1].Id, CategoryParameterId = categoryParameters[4].Id, Value = "3", TypeCode = TypeCode.Int32 }, // Дом А2 - Количество этажей
-            new() { Id = Guid.NewGuid(), AssetId = assets[1].Id, CategoryParameterId = categoryParameters[5].Id, Value = "2", TypeCode = TypeCode.Int32 }, // Дом А2 - Количество подъездов
-            new() { Id = Guid.NewGuid(), AssetId = assets[1].Id, CategoryParameterId = categoryParameters[6].Id, Value = "6", TypeCode = TypeCode.Int32 }, // Дом А2 - Количество квартир
-            new() { Id = Guid.NewGuid(), AssetId = assets[1].Id, CategoryParameterId = categoryParameters[7].Id, Value = "0", TypeCode = TypeCode.Int32 }, // Дом А2 - Количество машиномест
+            new() { Id = Guid.NewGuid(), AssetId = assets[1].Id, CategoryParameterId = categoryParameters[4].Id, Value = "3", TypeCode = TypeCode.Int32 },  // Дом А2 - Количество этажей
+            new() { Id = Guid.NewGuid(), AssetId = assets[1].Id, CategoryParameterId = categoryParameters[5].Id, Value = "2", TypeCode = TypeCode.Int32 },  // Дом А2 - Количество подъездов
+            new() { Id = Guid.NewGuid(), AssetId = assets[1].Id, CategoryParameterId = categoryParameters[6].Id, Value = "12", TypeCode = TypeCode.Int32 }, // Дом А2 - Количество квартир
+            new() { Id = Guid.NewGuid(), AssetId = assets[1].Id, CategoryParameterId = categoryParameters[7].Id, Value = "0", TypeCode = TypeCode.Int32 },  // Дом А2 - Количество машиномест
             
-            new() { Id = Guid.NewGuid(), AssetId = assets[2].Id, CategoryParameterId = categoryParameters[4].Id, Value = "3", TypeCode = TypeCode.Int32 }, // Дом А3 - Количество этажей
-            new() { Id = Guid.NewGuid(), AssetId = assets[2].Id, CategoryParameterId = categoryParameters[5].Id, Value = "2", TypeCode = TypeCode.Int32 }, // Дом А3 - Количество подъездов
-            new() { Id = Guid.NewGuid(), AssetId = assets[2].Id, CategoryParameterId = categoryParameters[6].Id, Value = "6", TypeCode = TypeCode.Int32 }, // Дом А3 - Количество квартир
-            new() { Id = Guid.NewGuid(), AssetId = assets[2].Id, CategoryParameterId = categoryParameters[7].Id, Value = "0", TypeCode = TypeCode.Int32 }, // Дом А3 - Количество машиномест
+            new() { Id = Guid.NewGuid(), AssetId = assets[2].Id, CategoryParameterId = categoryParameters[4].Id, Value = "3", TypeCode = TypeCode.Int32 },  // Дом А3 - Количество этажей
+            new() { Id = Guid.NewGuid(), AssetId = assets[2].Id, CategoryParameterId = categoryParameters[5].Id, Value = "2", TypeCode = TypeCode.Int32 },  // Дом А3 - Количество подъездов
+            new() { Id = Guid.NewGuid(), AssetId = assets[2].Id, CategoryParameterId = categoryParameters[6].Id, Value = "12", TypeCode = TypeCode.Int32 },  // Дом А3 - Количество квартир
+            new() { Id = Guid.NewGuid(), AssetId = assets[2].Id, CategoryParameterId = categoryParameters[7].Id, Value = "0", TypeCode = TypeCode.Int32 },  // Дом А3 - Количество машиномест
             
-            new() { Id = Guid.NewGuid(), AssetId = assets[3].Id, CategoryParameterId = categoryParameters[8].Id, Value = "3", TypeCode = TypeCode.Int32 }, // Подъезд 1 - Количество этажей
-            new() { Id = Guid.NewGuid(), AssetId = assets[3].Id, CategoryParameterId = categoryParameters[9].Id, Value = "6", TypeCode = TypeCode.Int32 }, // Подъезд 1 - Количество квартир
+            new() { Id = Guid.NewGuid(), AssetId = assets[3].Id, CategoryParameterId = categoryParameters[8].Id, Value = "3", TypeCode = TypeCode.Int32 },  // Дом А2 - Подъезд 1 - Количество этажей
+            new() { Id = Guid.NewGuid(), AssetId = assets[3].Id, CategoryParameterId = categoryParameters[9].Id, Value = "6", TypeCode = TypeCode.Int32 },  // Дом А2 - Подъезд 1 - Количество квартир
             
-            new() { Id = Guid.NewGuid(), AssetId = assets[4].Id, CategoryParameterId = categoryParameters[8].Id, Value = "3", TypeCode = TypeCode.Int32 }, // Подъезд 2 - Количество этажей
-            new() { Id = Guid.NewGuid(), AssetId = assets[4].Id, CategoryParameterId = categoryParameters[9].Id, Value = "6", TypeCode = TypeCode.Int32 }, // Подъезд 2 - Количество квартир
+            new() { Id = Guid.NewGuid(), AssetId = assets[4].Id, CategoryParameterId = categoryParameters[8].Id, Value = "3", TypeCode = TypeCode.Int32 },  // Дом А2 - Подъезд 2 - Количество этажей
+            new() { Id = Guid.NewGuid(), AssetId = assets[4].Id, CategoryParameterId = categoryParameters[9].Id, Value = "6", TypeCode = TypeCode.Int32 },  // Дом А2 - Подъезд 2 - Количество квартир
+            
+            new() { Id = Guid.NewGuid(), AssetId = assets[5].Id, CategoryParameterId = categoryParameters[8].Id, Value = "3", TypeCode = TypeCode.Int32 },  // Дом А3 - Подъезд 1 - Количество этажей
+            new() { Id = Guid.NewGuid(), AssetId = assets[5].Id, CategoryParameterId = categoryParameters[9].Id, Value = "6", TypeCode = TypeCode.Int32 },  // Дом А3 - Подъезд 1 - Количество квартир
+            
+            new() { Id = Guid.NewGuid(), AssetId = assets[6].Id, CategoryParameterId = categoryParameters[8].Id, Value = "3", TypeCode = TypeCode.Int32 },  // Дом А3 - Подъезд 2 - Количество этажей
+            new() { Id = Guid.NewGuid(), AssetId = assets[6].Id, CategoryParameterId = categoryParameters[9].Id, Value = "6", TypeCode = TypeCode.Int32 },  // Дом А3 - Подъезд 2 - Количество квартир
         };
         
         await context.Assets.AddRangeAsync(assets);
+        await context.AssetParents.AddRangeAsync(assetParents);
         await context.AssetCategoryParameters.AddRangeAsync(assetsCategories);
         await context.SaveChangesAsync();
 

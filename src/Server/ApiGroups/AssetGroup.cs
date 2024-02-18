@@ -1,6 +1,5 @@
 using Contracts.Asset;
 using Mapster;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
@@ -104,6 +103,7 @@ public static class AssetGroup
         if (asset is null)
             return TypedResults.NotFound("Актив не найден");
 
+        context.AssetParents.RemoveRange(context.AssetParents.Where(e => e.AssetId == id || e.ParentId == id));
         context.AssetCategoryParameters.RemoveRange(context.AssetCategoryParameters.Where(e => e.AssetId == id));
         context.Assets.Remove(asset);
         await context.SaveChangesAsync();

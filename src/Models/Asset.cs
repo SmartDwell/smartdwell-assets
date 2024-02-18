@@ -21,6 +21,11 @@ public sealed class Asset
     public string? Description { get; set; }
 
     /// <summary>
+    /// Идентификаторы родительских активов.
+    /// </summary>
+    public List<AssetParent> Parents { get; set; } = new();
+    
+    /// <summary>
     /// Категории.
     /// </summary>
     public IEnumerable<AssetCategoryParameter> Categories { get; set; } = new List<AssetCategoryParameter>();
